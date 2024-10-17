@@ -100,7 +100,7 @@ static async postUsuario(req, res) {
     correo,
     clave,
     rol,
-    nombre,
+    nombre, 
     apellido,
     genero,
     tipoDocumento,

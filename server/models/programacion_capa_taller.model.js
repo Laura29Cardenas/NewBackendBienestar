@@ -25,7 +25,10 @@ class ProgramacionCapaTaller extends Model {
 
       // Filtrar duplicados por 'fecha_procaptall' y 'horaInicio_procaptall'
       return programaciones.filter((programacion, index, self) =>
-        index === self.findIndex((p) => p.fecha_procaptall === programacion.fecha_procaptall && p.horaInicio_procaptall === programacion.horaInicio_procaptall)
+        index === self.findIndex((p) => 
+          p.fecha_procaptall === programacion.fecha_procaptall && 
+          p.horaInicio_procaptall === programacion.horaInicio_procaptall
+        )
       );
 
     } catch (error) {
@@ -34,7 +37,25 @@ class ProgramacionCapaTaller extends Model {
     }
   }
 
-  // Método para obtener la programación por sede
+  // Método para obtener el informe
+  static async getInforme(fecha, sede, coordinacion, numeroFicha, ambiente) {
+    try {
+        const result = await sequelize.query(
+            'CALL ObtenerProgramacionPorFicha(:numeroFicha, :coordinacion)', 
+            {
+                replacements: { numeroFicha, coordinacion },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        console.log("Resultado de la consulta:", result); // Verificar el resultado
+        return result;
+    } catch (error) {
+        console.error(`Error al obtener el informe: `, error);
+        throw error;
+    }
+}
+
+  // Método para obtener programaciones por sede
   static async getProgramacionesBySede(sede) {
     try {
       return await sequelize.query(
@@ -54,7 +75,7 @@ class ProgramacionCapaTaller extends Model {
     try {
       return await this.findAll();
     } catch (error) {
-      console.error(`error al encontrar las programaciones: ${error}`);
+      console.error(`Error al encontrar las programaciones: ${error}`);
       throw error;
     }
   }
@@ -63,16 +84,16 @@ class ProgramacionCapaTaller extends Model {
     try {
       return await this.findByPk(id_procaptall);
     } catch (error) {
-      console.error(`error al encontrar la programacion: ${error}`);
+      console.error(`Error al encontrar la programación: ${error}`);
       throw error;
     }
   }
 
-  // Método para obtener programaciones por sede 52
+  // Métodos para obtener programaciones por sede específicas
   static async getProgramacionesBySede52() {
     try {
       return await sequelize.query(
-        'CALL ObtenerProgramacionPorSede52()',
+        'CALL ObtenerProgramacionPorSede52()', 
         {
           type: sequelize.QueryTypes.SELECT
         }
@@ -81,9 +102,8 @@ class ProgramacionCapaTaller extends Model {
       console.error(`Error al obtener las programaciones por sede 52:`, error);
       throw error;
     }
-  }
+  } 
 
-  // Método para obtener programaciones por sede 64
   static async getProgramacionesBySede64() {
     try {
       return await sequelize.query(
@@ -98,7 +118,6 @@ class ProgramacionCapaTaller extends Model {
     }
   }
 
-  // Método para obtener programaciones por sede Fontibón
   static async getProgramacionesBySedeFontibon() {
     try {
       return await sequelize.query(
@@ -118,7 +137,7 @@ class ProgramacionCapaTaller extends Model {
       const programacionCT = await this.findByPk(id_procaptall);
       return programacionCT.update(update_programacionCT);
     } catch (error) {
-      console.error(`error no se actualizó la programacion: ${error}`);
+      console.error(`Error no se actualizó la programación: ${error}`);
       throw error;
     }
   }
@@ -130,7 +149,7 @@ class ProgramacionCapaTaller extends Model {
       });
       return programacionCT;
     } catch (error) {
-      console.error(`error al eliminar la programacion: ${error}`);
+      console.error(`Error al eliminar la programación: ${error}`);
       throw error;
     }
   }
@@ -138,7 +157,7 @@ class ProgramacionCapaTaller extends Model {
 
 ProgramacionCapaTaller.init(
   {
-    id_procaptall: { type: DataTypes.INTEGER, primaryKey: true },
+    id_procaptall: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // Asegúrate de tener autoIncrement si es necesario
     sede_procaptall: {
       type: DataTypes.ENUM("SEDE 52", "SEDE 64", "SEDE FONTIBON"),
       allowNull: false,
@@ -151,6 +170,7 @@ ProgramacionCapaTaller.init(
     id_TallerFK: { type: DataTypes.INTEGER, allowNull: false },
     id_CapacFK: { type: DataTypes.INTEGER, allowNull: false },
     numero_FichaFK: { type: DataTypes.INTEGER, allowNull: false },
+    // Eliminar cordinacion_Ficha de aquí, ya que debería estar en la tabla Ficha, no en esta tabla
   },
   {
     sequelize,
@@ -159,17 +179,5 @@ ProgramacionCapaTaller.init(
     underscored: false,
   }
 );
-
-// Función para obtener y mostrar la programación
-(async () => {
-  const ficha = 2902081;
-  const cordinacion = 'Análisis y desarrollo de software';
-  try {
-    const programacion = await ProgramacionCapaTaller.getProgramacionPorFicha(ficha, cordinacion);
-    console.log(programacion); // Aquí se mostrarán los datos obtenidos
-  } catch (error) {
-    console.error('Error al obtener programación:', error);
-  }
-})();
 
 export { ProgramacionCapaTaller };

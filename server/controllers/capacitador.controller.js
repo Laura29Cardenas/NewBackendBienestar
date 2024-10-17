@@ -8,7 +8,7 @@ class CapacitadorController {
         } catch (error) {
             res.status( 500  ).json( { message: "Error al obtener capacitadores" +  error } );
         }
-    }   
+    }    
 
     static async getCapacitador(req, res){
         try {

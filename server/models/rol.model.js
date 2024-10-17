@@ -9,7 +9,7 @@ class Rol extends Model {
       console.error(`error al crear rol: ${error}`);
       throw error;
     }
-  }
+  } 
 
   static async getRoles() {
     try {

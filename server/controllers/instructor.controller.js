@@ -7,7 +7,7 @@ class InstructorController {
             res.status( 200  ).json( instructores );
         } catch (error) {
             res.status( 500  ).json( { message: "Error al obtener instructores" +  error } );
-        }
+        } 
     }   
 
     static async getInstructor(req, res){

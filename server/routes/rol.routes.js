@@ -9,4 +9,4 @@ router.get('/api/rol/:id', RolController.getRol);
 router.put('/api/rol/:id', RolController.putRol);
 router.post('/api/rol', RolController.postRol);
 
-export default router;
+export default router; 

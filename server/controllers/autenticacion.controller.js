@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 
 dotenv.config();
 
-class AutenticacionController {
+class AutenticacionController { 
   static async login(req, res) {
     try {
       const { correo_Usua, clave_Usua } = req.body;

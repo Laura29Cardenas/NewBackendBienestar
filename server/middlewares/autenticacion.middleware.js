@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
       .status(401)
       .json({ message: "Acceso denegado. Token no encontrado." });
   }
-
+ 
   try {
     const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRECT);
     req.user = decoded;

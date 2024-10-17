@@ -9,7 +9,7 @@ class DisponibilidadBienestar extends Model {
       console.error(`error al crear disponibilidad de bienestar: ${error}`);
       throw error;
     }
-  }
+  } 
 
   static async getDisponibilidadesB() {
     try {

@@ -8,7 +8,7 @@ class FichaController {
         } catch (error) {
             res.status( 500  ).json( { message: "Error al obtener las fichas" +  error } );
         }
-    }   
+    }    
 
     static async getFicha(req, res){
         try {

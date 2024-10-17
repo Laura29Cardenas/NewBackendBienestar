@@ -9,7 +9,7 @@ import { Administrador } from "../models/administrador.model.js";
 import { Capacitador } from "../models/capacitador.model.js";
 import { Taller } from "../models/taller.model.js";
 import { Op } from "sequelize";
-
+ 
 class ExcelController {
   static async cargarFichas(req, res) {
     try {

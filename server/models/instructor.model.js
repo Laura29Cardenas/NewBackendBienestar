@@ -9,7 +9,7 @@ class Instructor extends Model {
       console.error(`error al crear instructor: ${error}`);
       throw error;
     }
-  }
+  } 
 
   static async getInstructores() {
     try {

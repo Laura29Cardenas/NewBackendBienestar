@@ -9,7 +9,7 @@ class RolController{
     } catch (error) {
       res.status(500).json({ message: "Error al obtener los roles" + error });
     }
-  }
+  } 
 
   static async getRol(req, res) {
     try {

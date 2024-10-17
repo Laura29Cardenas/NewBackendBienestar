@@ -9,7 +9,7 @@ class DisponibilidadBienestarController {
             res.status( 500  ).json( { message: "Error al obtener las disponibilidades de bienestar" +  error } );
         }
     }   
-
+ 
     static async getDispoB(req, res){
         try {
             const id = req.params.id;

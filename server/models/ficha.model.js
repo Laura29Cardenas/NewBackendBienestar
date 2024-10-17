@@ -9,7 +9,7 @@ class Ficha extends Model {
       console.error(`error al crear ficha: ${error}`);
       throw error;
     }
-  }
+  } 
 
   static async getFichas() {
     try {

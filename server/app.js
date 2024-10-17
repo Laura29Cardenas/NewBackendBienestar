@@ -15,6 +15,7 @@ import AutenticacionRoutes from './routes/autenticacion.routes.js';
 
 const app = express();
 
+
 app.use(express.json());
 app.use(cors());
 
@@ -24,7 +25,7 @@ app.use(AdministradorRoutes);
 app.use(InstructorRoutes);
 app.use(CapacitadorRoutes);
 app.use(HorarioRoutes);
-app.use(FichaRouter);
+app.use(FichaRouter); 
 app.use(RolRouter);
 app.use(TallerRoutes);
 app.use(DisponibilidadBienestarRoutes);

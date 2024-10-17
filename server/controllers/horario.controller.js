@@ -8,7 +8,7 @@ class HorarioController {
     } catch (error) {
       res.status(500).json({ message: "Error al obtener horarios" + error });
     }
-  }
+  } 
 
   static async getHorario(req, res) {
     try {

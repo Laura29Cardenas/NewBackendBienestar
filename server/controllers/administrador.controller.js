@@ -9,8 +9,7 @@ class AdministradorController{
     } catch (error) {
       res.status(500).json({ message: "Error al obtener los administradores" + error });
     }
-  }
-
+  } 
   static async getAdministrador(req, res) {
     try {
       const id = req.params.id;
