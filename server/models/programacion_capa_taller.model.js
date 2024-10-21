@@ -41,19 +41,27 @@ class ProgramacionCapaTaller extends Model {
   static async getInforme(fecha, sede, coordinacion, numeroFicha, ambiente) {
     try {
         const result = await sequelize.query(
-            'CALL ObtenerProgramacionPorFicha(:numeroFicha, :coordinacion)', 
+            'CALL ObtenerProgramacionPorFicha(:numeroFicha, :coordinacion, :fecha, :sede, :ambiente)', 
             {
-                replacements: { numeroFicha, coordinacion },
+                replacements: { numeroFicha, coordinacion, fecha, sede, ambiente },
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        console.log("Resultado de la consulta:", result); // Verificar el resultado
-        return result;
+
+        console.log("Resultado de la consulta:", result);
+
+        // Verificar si hay datos
+        if (result.length > 0 && result[0]['0']) {
+            return result[0]['0']; // Retornar solo el primer objeto relevante
+        } else {
+            return null; // Devolver null si no hay resultados
+        }
     } catch (error) {
         console.error(`Error al obtener el informe: `, error);
         throw error;
     }
 }
+
 
   // Método para obtener programaciones por sede
   static async getProgramacionesBySede(sede) {

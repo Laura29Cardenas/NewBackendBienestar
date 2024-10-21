@@ -14,6 +14,9 @@ router.get('/api/programacion', ProgramacionCapaTallerController.getProgramacion
 // Ruta para obtener informe 
 router.post('/api/obtenerInforme', ProgramacionCapaTallerController.postObtenerInforme);
 
+// Ruta para generar informe PDF
+router.post('/api/generarInformePDF', ProgramacionCapaTallerController.postGenerarInformePDF);
+
 // Rutas para programaciones de capacitación
 router.get('/api/programacion/:id', ProgramacionCapaTallerController.getProgramacionCT);
 router.get('/api/programaciones/:sede', ProgramacionCapaTallerController.getProgramacionesPorSede);
@@ -23,3 +26,4 @@ router.post('/api/programacion', ProgramacionCapaTallerController.postProgramaci
 router.delete('/api/programacion/:id_procaptall', ProgramacionCapaTallerController.deleteProgramacionCT);
 
 export default router;
+

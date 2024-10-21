@@ -34,77 +34,80 @@ class ProgramacionCapaTallerController {
   }
 
   static async postObtenerInforme(req, res) {
-    console.log("Request recibido:", req.body); // Añadir este log
+    console.log("Request recibido:", req.body);
     const { fecha, sede, coordinacion, numeroFicha, ambiente } = req.body;
 
     try {
         const informe = await ProgramacionCapaTaller.getInforme(fecha, sede, coordinacion, numeroFicha, ambiente);
         
-        if (!informe || informe.length === 0) {
+        if (!informe) {
             return res.status(404).json({
                 message: "No se encontraron informes para los datos proporcionados.",
             });
         }
- 
-        const pdfBuffer = await ProgramacionCapaTallerController.generarInformePDF(informe);
         
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": 'attachment; filename="informe.pdf"',
-            "Content-Length": pdfBuffer.length,
-        });
-        res.send(pdfBuffer);
+        res.status(200).json(informe);
     } catch (error) {
         console.error("Error al obtener el informe: ", error);
         res.status(500).json({ message: "Error en el servidor al obtener el informe." });
     }
 }
 
-static async generarInformePDF(informe) {
-  return new Promise((resolve, reject) => {
-      const doc = new PDFDocument();
-      let buffers = [];
+  static async postGenerarInformePDF(req, res) {
+      const { fecha, sede, coordinacion, numeroFicha, ambiente } = req.body;
 
-      doc.on("data", buffers.push.bind(buffers));
-      doc.on("end", () => {
-          const pdfData = Buffer.concat(buffers);
-          resolve(pdfData);
-      });
+      try {
+          const informe = await ProgramacionCapaTaller.getInforme(fecha, sede, coordinacion, numeroFicha, ambiente);
 
-      // Agregar contenido al PDF
-      doc.fontSize(20).text("Informe de Programación", { align: "center" });
-      doc.moveDown();
+          if (!informe) {
+              return res.status(404).json({ message: "No se encontraron datos para generar el PDF." });
+          }
 
-      // Comprobar que el informe tenga datos
-      if (!informe || informe.length === 0) {
-          doc.fontSize(12).text(`No hay datos disponibles.`);
-          doc.end();
-          return;
+          // Asegúrate de que el método se llama correctamente
+          const pdfData = await this.generarInformePDF(informe);
+          
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', 'attachment; filename=informe.pdf');
+          res.send(pdfData);
+      } catch (error) {
+          console.error("Error al generar el PDF: ", error);
+          res.status(500).json({ message: "Error en el servidor al generar el PDF.", error: error.stack });
       }
+  }
 
-      informe.forEach((item) => {
-          const data = item[0]; // Asegúrate de que este acceso es correcto
+  static async generarInformePDF(informe) {
+      return new Promise((resolve, reject) => {
+          const doc = new PDFDocument();
+          let buffers = [];
 
-          // Verificar si data es undefined
-          if (!data) {
-              doc.fontSize(12).text(``);
+          doc.on("data", buffers.push.bind(buffers));
+          doc.on("end", () => {
+              const pdfData = Buffer.concat(buffers);
+              resolve(pdfData);
+          });
+
+          doc.fontSize(20).text("Informe de Programación", { align: "center" });
+          doc.moveDown();
+
+          if (!informe || informe.length === 0) {
+              doc.fontSize(12).text(`No hay datos disponibles.`);
+              doc.end();
               return;
           }
 
-          doc.fontSize(12).text(`Fecha: ${data.fecha_procaptall || "No disponible"}`);
-          doc.text(`Sede: ${data.sede_procaptall || "No disponible"}`);
-          doc.text(`Coordinación: ${data.cordinacion_Ficha || "No disponible"}`);
-          doc.text(`Número de Ficha: ${data.numero_FichaFK || "No disponible"}`);
-          doc.text(`Ambiente: ${data.ambiente_procaptall || "No disponible"}`);
-          doc.text(`Descripción: ${data.descripcion_procaptall || "No disponible"}`);
-          doc.moveDown();
+          informe.forEach((data) => {
+              doc.fontSize(12).text(`Fecha: ${data.fecha_procaptall || "No disponible"}`);
+              doc.text(`Sede: ${data.sede_procaptall || "No disponible"}`);
+              doc.text(`Coordinación: ${data.cordinacion_Ficha || "No disponible"}`);
+              doc.text(`Número de Ficha: ${data.numero_FichaFK || "No disponible"}`);
+              doc.text(`Ambiente: ${data.ambiente_procaptall || "No disponible"}`);
+              doc.text(`Descripción: ${data.descripcion_procaptall || "No disponible"}`);
+              doc.moveDown();
+          });
+
+          doc.end();
       });
-
-      doc.end();
-  });
-}
-
-
+  }
 
   // Obtener programaciones por sede
   static async getProgramacionesPorSede(req, res) {
