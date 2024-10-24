@@ -8,7 +8,7 @@ router.get('/api/taller/:nombre', TallerController.getTallerPorNombre); // Cambi
 router.put('/api/taller/:id', TallerController.putTaller);
 router.post('/api/taller', TallerController.postTaller);
 router.delete('/api/taller/:id_Taller', TallerController.deleteTaller);
-
+ 
 export default router;
  
 

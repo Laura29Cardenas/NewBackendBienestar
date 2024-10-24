@@ -1,7 +1,7 @@
 import { DataTypes, INTEGER, Model } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-class Ficha extends Model {
+class Ficha extends Model { 
   static async createFicha(ficha) {
     try {
       return await this.create(ficha);

@@ -106,7 +106,7 @@ class ProgramacionCapaTallerController {
           });
 
           doc.end();
-      });
+      }); 
   }
 
   // Obtener programaciones por sede

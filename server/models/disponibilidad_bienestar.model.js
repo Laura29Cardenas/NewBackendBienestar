@@ -1,7 +1,7 @@
 import { DataTypes, INTEGER, Model } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-class DisponibilidadBienestar extends Model {
+class DisponibilidadBienestar extends Model { 
   static async createDispoB(taller) {
     try {
       return await this.create(dispoB);

@@ -11,4 +11,4 @@ router.put( '/api/dispoB/:id', DisponibilidadBienestarController.putDispoB )
 router.post( '/api/dispoB', DisponibilidadBienestarController.postDispoB )
 router.delete( '/api/dispoB/:id_dispoB', DisponibilidadBienestarController.deleteDispoB )
 
-export default router; 
+export default router;  

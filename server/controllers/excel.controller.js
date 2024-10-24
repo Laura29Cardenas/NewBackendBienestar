@@ -10,7 +10,7 @@ import { Capacitador } from "../models/capacitador.model.js";
 import { Taller } from "../models/taller.model.js";
 import { Op } from "sequelize";
  
-class ExcelController {
+class ExcelController { 
   static async cargarFichas(req, res) {
     try {
       const filePath = req.file.path; // Asegurando la ruta completa dentro de la solicitud

@@ -1,7 +1,7 @@
 import { DataTypes, INTEGER, Model } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-class Horario extends Model {
+class Horario extends Model { 
   static async createHorario(horario) {
     try {
       return await this.create(horario);

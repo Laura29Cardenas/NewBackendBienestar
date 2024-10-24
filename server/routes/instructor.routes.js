@@ -8,4 +8,4 @@ router.get( '/api/instructor/:id',  InstructorController.getInstructor )
 router.put( '/api/instructor/:id',  InstructorController.putInstructor )
 router.post( '/api/instructor',  InstructorController.postInstructor )
 
-export default router; 
+export default router;  

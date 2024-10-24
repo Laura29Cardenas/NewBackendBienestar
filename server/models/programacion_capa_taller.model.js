@@ -48,7 +48,7 @@ class ProgramacionCapaTaller extends Model {
             }
         );
 
-        console.log("Resultado de la consulta:", result);
+        console.log("Resultado de la consulta:", result); 
 
         // Verificar si hay datos
         if (result.length > 0 && result[0]['0']) {
@@ -61,7 +61,6 @@ class ProgramacionCapaTaller extends Model {
         throw error;
     }
 }
-
 
   // Método para obtener programaciones por sede
   static async getProgramacionesBySede(sede) {

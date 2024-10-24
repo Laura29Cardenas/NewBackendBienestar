@@ -1,6 +1,6 @@
 import { DataTypes, INTEGER, Model } from "sequelize";
 import { sequelize } from "../config/db.js";
-
+ 
 class Instructor extends Model {
   static async createInstructor(instructor) {
     try {

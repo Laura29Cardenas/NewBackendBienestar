@@ -8,4 +8,4 @@ router.get('/api/administrador/:id', AdministradorController.getAdministrador);
 router.put('/api/administrador/:id', AdministradorController.putAdministrador);
 router.post('/api/administrador', AdministradorController.postAdministrador);
 
-export default router;      
+export default router;       

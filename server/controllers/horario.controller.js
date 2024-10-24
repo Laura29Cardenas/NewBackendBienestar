@@ -11,7 +11,7 @@ class HorarioController {
   } 
 
   static async getHorario(req, res) {
-    try {
+    try { 
       const id = req.params.id;
       const horario = await Horario.getHorario(id);
       if (horario) {

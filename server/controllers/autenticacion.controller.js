@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import bcrypt from 'bcrypt';
 
 dotenv.config();
-
+ 
 class AutenticacionController { 
   static async login(req, res) {
     try {

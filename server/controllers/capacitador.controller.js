@@ -9,7 +9,7 @@ class CapacitadorController {
             res.status( 500  ).json( { message: "Error al obtener capacitadores" +  error } );
         }
     }    
-
+ 
     static async getCapacitador(req, res){
         try {
             const id = req.params.id;

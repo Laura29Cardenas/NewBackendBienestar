@@ -37,7 +37,7 @@ class Capacitador extends Model {
       console.error(`error no se actualizó el capacitador: ${error}`);
       throw error;
     }
-  }
+  } 
 
 }
  

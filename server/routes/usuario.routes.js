@@ -9,5 +9,5 @@ router.get('/api/perfil/:id', UsuarioController.getPerfil)
 router.put('/api/usuario/:id_Usuario', UsuarioController.putUsuario)
 router.post( '/api/usuario', UsuarioController.postUsuario )
 router.delete( '/api/usuario/:id', UsuarioController.inactivarUsuario )
-
+ 
 export default router; 

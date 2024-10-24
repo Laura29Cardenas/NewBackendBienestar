@@ -11,7 +11,7 @@ class InstructorController {
     }   
 
     static async getInstructor(req, res){
-        try {
+        try { 
             const id = req.params.id;
             const  instructor = await Instructor.getInstructor(id);
             if  ( Instructor ) {

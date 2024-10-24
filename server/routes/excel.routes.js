@@ -9,4 +9,4 @@ router.post('/api/horarios/upload', upload.single('file'), ExcelController.carga
 router.post('/api/usuarios/upload', upload.single('file'), ExcelController.cargarUsuarios);
 router.post('/api/talleres/upload', upload.single('file'), ExcelController.cargarTalleres);
 
-export default router; 
+export default router;   

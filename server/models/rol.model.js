@@ -1,6 +1,6 @@
 import { DataTypes, INTEGER, Model } from "sequelize";
 import { sequelize } from "../config/db.js";
-
+ 
 class Rol extends Model {
   static async createRol(Rol) {
     try {

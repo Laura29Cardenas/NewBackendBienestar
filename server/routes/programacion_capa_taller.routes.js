@@ -7,7 +7,7 @@ const router = Router();
 router.get('/api/programaciones/sede52', ProgramacionCapaTallerController.getProgramacionesPorSede);
 router.get('/api/programaciones/sede64', ProgramacionCapaTallerController.getProgramacionesPorSede);
 router.get('/api/programaciones/sedeFontibon', ProgramacionCapaTallerController.getProgramacionesPorSede);
-
+ 
 // Ruta para obtener todas las programaciones de capacitación
 router.get('/api/programacion', ProgramacionCapaTallerController.getProgramacionesCT);
 
@@ -26,4 +26,3 @@ router.post('/api/programacion', ProgramacionCapaTallerController.postProgramaci
 router.delete('/api/programacion/:id_procaptall', ProgramacionCapaTallerController.deleteProgramacionCT);
 
 export default router;
-

@@ -59,10 +59,6 @@ static async getUsuario(req, res) {
   }
 }
 
-  
-  
-  
-  
 static async putUsuario(req, res) {
   try {
     const { nombre, apellido, correo_Usua, clave_Usua, genero, id_Rol1FK, estado } = req.body;
@@ -184,7 +180,7 @@ static async postUsuario(req, res) {
     await transaction.rollback();
     console.error(error);
     res.status(500).json({ message: 'Error al registrar el usuario: ' + error.message });
-  }
+  } 
 }
 
 

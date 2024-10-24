@@ -14,7 +14,7 @@ class Taller extends Model {
     static async getTallerPorNombre(nombreTaller) {
       try {
           console.log("Ejecutando consulta para:", nombreTaller); // Log antes de ejecutar la consulta
-          
+           
           const [results] = await sequelize.query('CALL ObtenerTallerPorNombre(:nombre)', {
               replacements: { nombre: nombreTaller },
               type: sequelize.QueryTypes.RAW

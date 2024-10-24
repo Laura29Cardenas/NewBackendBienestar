@@ -1,7 +1,7 @@
 import { DataTypes, INTEGER, Model } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-class Administrador extends Model {
+class Administrador extends Model { 
 
   static async createAdministrador(administrador) {
     try {

@@ -16,7 +16,7 @@ const authMiddleware = (req, res, next) => {
     const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRECT);
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch (error) { 
     return res.status(400).json({ message: "Token no valido." });
   }
 

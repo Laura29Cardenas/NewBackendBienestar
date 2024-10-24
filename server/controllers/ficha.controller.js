@@ -11,7 +11,7 @@ class FichaController {
     }    
 
     static async getFicha(req, res){
-        try {
+        try { 
             const numero_Ficha = req.params.id;
             const  ficha = await Ficha.getFicha(numero_Ficha);
             if  ( Ficha ) {
