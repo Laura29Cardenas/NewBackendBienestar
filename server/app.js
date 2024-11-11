@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url'; // Importar esta función para convertir URL a ruta de archivo
+
 import UsuarioRoutes from './routes/usuario.routes.js';
 import AdministradorRoutes from './routes/administrador.routes.js';
 import InstructorRoutes from './routes/instructor.routes.js';
@@ -12,9 +15,12 @@ import DisponibilidadBienestarRoutes from './routes/disponibilidad_bienestar.rou
 import ProgramacionCapaTallerRoutes from './routes/programacion_capa_taller.routes.js';
 import ExcelRoutes from './routes/excel.routes.js';
 import AutenticacionRoutes from './routes/autenticacion.routes.js';
-import authRoutes from './routes/auth.js';
 
 const app = express();
+
+// Obtener la ruta del directorio actual (equivalente a __dirname)
+const __filename = fileURLToPath(import.meta.url); // Obtener el archivo actual
+const __dirname = path.dirname(__filename); // Obtener el directorio a partir del archivo
 
 app.use(express.json());
 app.use(cors());
@@ -32,7 +38,8 @@ app.use(DisponibilidadBienestarRoutes);
 app.use(ProgramacionCapaTallerRoutes);
 app.use(ExcelRoutes);
 app.use(AutenticacionRoutes);
-app.use('/api', authRoutes);
 
-export default app; 
+// Rutas estáticas para la imagen
+app.use('/img', express.static(path.join(__dirname, 'img')));
 
+export default app;

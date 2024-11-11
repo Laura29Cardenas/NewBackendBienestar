@@ -11,10 +11,10 @@ router.get('/api/programaciones/sedeFontibon', ProgramacionCapaTallerController.
 // Ruta para obtener todas las programaciones de capacitación
 router.get('/api/programacion', ProgramacionCapaTallerController.getProgramacionesCT);
 
-// Ruta para obtener informe 
+// Ruta para obtener el informe
 router.post('/api/obtenerInforme', ProgramacionCapaTallerController.postObtenerInforme);
 
-// Ruta para generar informe PDF
+// Ruta para generar el informe en PDF
 router.post('/api/generarInformePDF', ProgramacionCapaTallerController.postGenerarInformePDF);
 
 // Rutas para programaciones de capacitación

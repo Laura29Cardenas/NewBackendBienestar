@@ -3,6 +3,7 @@ import PDFDocument from "pdfkit";
 import express from "express";
 import fs from "fs";
 import path from "path";
+import { createPDF } from "../utils/generarPDF.js"; 
 
 class ProgramacionCapaTallerController {
   // Obtener programaciones por ficha
@@ -22,7 +23,7 @@ class ProgramacionCapaTallerController {
             (p) => p.fecha_procaptall === programacion.fecha_procaptall &&
                    p.horaInicio_procaptall === programacion.horaInicio_procaptall
           )
-      );
+      ); 
 
       res.status(200).json(uniqueProgramaciones);
     } catch (error) {
@@ -33,81 +34,57 @@ class ProgramacionCapaTallerController {
     }
   }
 
+  // Obtener el informe según los parámetros proporcionados
   static async postObtenerInforme(req, res) {
-    console.log("Request recibido:", req.body);
     const { fecha, sede, coordinacion, numeroFicha, ambiente } = req.body;
 
     try {
-        const informe = await ProgramacionCapaTaller.getInforme(fecha, sede, coordinacion, numeroFicha, ambiente);
-        
-        if (!informe) {
-            return res.status(404).json({
-                message: "No se encontraron informes para los datos proporcionados.",
-            });
-        }
-        
-        res.status(200).json(informe);
-    } catch (error) {
-        console.error("Error al obtener el informe: ", error);
-        res.status(500).json({ message: "Error en el servidor al obtener el informe." });
-    }
-}
+      const informe = await ProgramacionCapaTaller.getInforme(fecha, sede, coordinacion, numeroFicha, ambiente);
 
-  static async postGenerarInformePDF(req, res) {
-      const { fecha, sede, coordinacion, numeroFicha, ambiente } = req.body;
-
-      try {
-          const informe = await ProgramacionCapaTaller.getInforme(fecha, sede, coordinacion, numeroFicha, ambiente);
-
-          if (!informe) {
-              return res.status(404).json({ message: "No se encontraron datos para generar el PDF." });
-          }
-
-          // Asegúrate de que el método se llama correctamente
-          const pdfData = await this.generarInformePDF(informe);
-          
-          res.setHeader('Content-Type', 'application/pdf');
-          res.setHeader('Content-Disposition', 'attachment; filename=informe.pdf');
-          res.send(pdfData);
-      } catch (error) {
-          console.error("Error al generar el PDF: ", error);
-          res.status(500).json({ message: "Error en el servidor al generar el PDF.", error: error.stack });
+      if (!informe) {
+        return res.status(404).json({
+          message: "No se encontraron informes para los datos proporcionados.",
+        });
       }
+
+      res.status(200).json(informe);
+    } catch (error) {
+      console.error("Error al obtener el informe:", error.message);
+      res.status(500).json({
+        message: "Error en el servidor al obtener el informe.",
+        error: error.message,
+      });
+    }
   }
 
-  static async generarInformePDF(informe) {
-      return new Promise((resolve, reject) => {
-          const doc = new PDFDocument();
-          let buffers = [];
-
-          doc.on("data", buffers.push.bind(buffers));
-          doc.on("end", () => {
-              const pdfData = Buffer.concat(buffers);
-              resolve(pdfData);
-          });
-
-          doc.fontSize(20).text("Informe de Programación", { align: "center" });
-          doc.moveDown();
-
-          if (!informe || informe.length === 0) {
-              doc.fontSize(12).text(`No hay datos disponibles.`);
-              doc.end();
-              return;
-          }
-
-          informe.forEach((data) => {
-              doc.fontSize(12).text(`Fecha: ${data.fecha_procaptall || "No disponible"}`);
-              doc.text(`Sede: ${data.sede_procaptall || "No disponible"}`);
-              doc.text(`Coordinación: ${data.cordinacion_Ficha || "No disponible"}`);
-              doc.text(`Número de Ficha: ${data.numero_FichaFK || "No disponible"}`);
-              doc.text(`Ambiente: ${data.ambiente_procaptall || "No disponible"}`);
-              doc.text(`Descripción: ${data.descripcion_procaptall || "No disponible"}`);
-              doc.moveDown();
-          });
-
-          doc.end();
-      }); 
-  }
+  // Generar el informe en PDF
+  static async postGenerarInformePDF(req, res) {
+    const { fecha, sede, coordinacion, numeroFicha, ambiente } = req.body;
+  
+    console.log("Datos recibidos del frontend:", req.body); // Verifica los datos enviados desde el frontend
+  
+    try {
+      // Obtener el informe usando los parámetros proporcionados
+      const informe = await ProgramacionCapaTaller.getInforme(fecha, sede, coordinacion, numeroFicha, ambiente);
+  
+      if (!informe) {
+        console.error("No se encontraron datos para generar el PDF");
+        return res.status(404).json({ message: "No se encontraron datos para generar el PDF." });
+      }
+  
+      console.log("Informe obtenido de la base de datos:", informe); // Asegúrate de que los datos sean correctos
+  
+      // Generar el PDF con los datos obtenidos
+      const pdfData = await ProgramacionCapaTaller.generarInformePDF(informe);
+  
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=informe.pdf');
+      res.send(pdfData);
+    } catch (error) {
+      console.error("Error al generar el PDF: ", error);
+      res.status(500).json({ message: "Error en el servidor al generar el PDF.", error: error.stack });
+    }
+  }  
 
   // Obtener programaciones por sede
   static async getProgramacionesPorSede(req, res) {

@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 // Reemplaza 'nombre_de_tu_base_de_datos' y 'usuario' con tus credenciales
-const sequelize = new Sequelize('Programacion', 'root', '', {
+const sequelize = new Sequelize('Programacion12', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
 });
