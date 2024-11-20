@@ -2,11 +2,10 @@ import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../config/db.js";
 import PDFDocument from "pdfkit";
 import fs from "fs";
-import { fileURLToPath } from 'url'; // Importa la función fileURLToPath
-import path from 'path';  // Importa el módulo path
+import { fileURLToPath } from "url"; // Importa la función fileURLToPath
+import path from "path"; // Importa el módulo path
 
 class ProgramacionCapaTaller extends Model {
-  
   static async createProgramacionCT(data) {
     try {
       return await this.create(data);
@@ -20,23 +19,25 @@ class ProgramacionCapaTaller extends Model {
   static async getProgramacionPorFicha(ficha, cordinacion) {
     try {
       const programaciones = await sequelize.query(
-        'CALL ObtenerProgramacionPorFicha(:ficha, :cordinacion)', 
+        "CALL ObtenerProgramacionPorFicha(:ficha, :cordinacion)",
         {
           replacements: { ficha, cordinacion },
-          type: sequelize.QueryTypes.SELECT
+          type: sequelize.QueryTypes.SELECT,
         }
       );
 
       // Filtrar duplicados por 'fecha_procaptall' y 'horaInicio_procaptall'
-      return programaciones.filter((programacion, index, self) =>
-        index === self.findIndex((p) => 
-          p.fecha_procaptall === programacion.fecha_procaptall && 
-          p.horaInicio_procaptall === programacion.horaInicio_procaptall
-        )
+      return programaciones.filter(
+        (programacion, index, self) =>
+          index ===
+          self.findIndex(
+            (p) =>
+              p.fecha_procaptall === programacion.fecha_procaptall &&
+              p.horaInicio_procaptall === programacion.horaInicio_procaptall
+          )
       );
-
     } catch (error) {
-      console.error('Error al ejecutar ObtenerProgramacionPorFicha:', error);
+      console.error("Error al ejecutar ObtenerProgramacionPorFicha:", error);
       throw error;
     }
   }
@@ -46,15 +47,15 @@ class ProgramacionCapaTaller extends Model {
     try {
       // Realizamos la consulta SQL
       const result = await sequelize.query(
-        'CALL ObtenerProgramacionPorFicha(:numeroFicha, :coordinacion, :fecha, :sede, :ambiente)', 
+        "CALL ObtenerProgramacionPorFicha(:numeroFicha, :coordinacion, :fecha, :sede, :ambiente)",
         {
           replacements: { numeroFicha, coordinacion, fecha, sede, ambiente },
-          type: sequelize.QueryTypes.SELECT
+          type: sequelize.QueryTypes.SELECT,
         }
       );
-  
-      console.log("Resultado de la consulta:", result);  // Verifica los datos que estamos obteniendo
-  
+
+      console.log("Resultado de la consulta:", result); // Verifica los datos que estamos obteniendo
+
       // Si hay resultados, retornar el primer objeto
       if (result.length > 0) {
         return result[0]; // Devuelve el primer resultado
@@ -62,10 +63,13 @@ class ProgramacionCapaTaller extends Model {
         return null; // Si no hay resultados, devuelve null
       }
     } catch (error) {
-      console.error("Error al obtener el informe desde el modelo:", error.message);
+      console.error(
+        "Error al obtener el informe desde el modelo:",
+        error.message
+      );
       throw error;
     }
-  }  
+  }
 
   // Método para generar el informe en PDF
   static async generarInformePDF(informe) {
@@ -109,7 +113,7 @@ class ProgramacionCapaTaller extends Model {
   
       // Ubicamos la imagen en la esquina superior derecha
       doc.image(imagePath, doc.page.width - imageWidth - 30, 20, { width: imageWidth, height: imageHeight });
-  
+
       // Verifica que el informe tenga datos
       if (!informe || !informe[0]) {
         doc.fontSize(12).text("No se encontraron datos para generar el informe.");
@@ -147,20 +151,20 @@ class ProgramacionCapaTaller extends Model {
       // Finaliza el documento
       doc.end();
     });
-  }      
+  }
 
   // Método para obtener programaciones por sede
   static async getProgramacionesBySede(sede) {
     try {
-      return await sequelize.query(
-        'CALL ObtenerProgramacionPorSede(:sede)',
-        {
-          replacements: { sede },
-          type: sequelize.QueryTypes.SELECT
-        }
-      );
+      return await sequelize.query("CALL ObtenerProgramacionPorSede(:sede)", {
+        replacements: { sede },
+        type: sequelize.QueryTypes.SELECT,
+      });
     } catch (error) {
-      console.error(`Error al obtener las programaciones por sede (${sede}): `, error);
+      console.error(
+        `Error al obtener las programaciones por sede (${sede}): `,
+        error
+      );
       throw error;
     }
   }
@@ -186,26 +190,20 @@ class ProgramacionCapaTaller extends Model {
   // Métodos para obtener programaciones por sede específicas
   static async getProgramacionesBySede52() {
     try {
-      return await sequelize.query(
-        'CALL ObtenerProgramacionPorSede52()', 
-        {
-          type: sequelize.QueryTypes.SELECT
-        }
-      );
+      return await sequelize.query("CALL ObtenerProgramacionPorSede52()", {
+        type: sequelize.QueryTypes.SELECT,
+      });
     } catch (error) {
       console.error(`Error al obtener las programaciones por sede 52:`, error);
       throw error;
     }
-  } 
+  }
 
   static async getProgramacionesBySede64() {
     try {
-      return await sequelize.query(
-        'CALL ObtenerProgramacionPorSede64()',
-        {
-          type: sequelize.QueryTypes.SELECT
-        }
-      );
+      return await sequelize.query("CALL ObtenerProgramacionPorSede64()", {
+        type: sequelize.QueryTypes.SELECT,
+      });
     } catch (error) {
       console.error(`Error al obtener las programaciones por sede 64:`, error);
       throw error;
@@ -215,13 +213,16 @@ class ProgramacionCapaTaller extends Model {
   static async getProgramacionesBySedeFontibon() {
     try {
       return await sequelize.query(
-        'CALL ObtenerProgramacionPorSedeFontibon()',
+        "CALL ObtenerProgramacionPorSedeFontibon()",
         {
-          type: sequelize.QueryTypes.SELECT
+          type: sequelize.QueryTypes.SELECT,
         }
       );
     } catch (error) {
-      console.error(`Error al obtener las programaciones por sede Fontibón:` , error);
+      console.error(
+        `Error al obtener las programaciones por sede Fontibón:`,
+        error
+      );
       throw error;
     }
   }
@@ -251,7 +252,11 @@ class ProgramacionCapaTaller extends Model {
 
 ProgramacionCapaTaller.init(
   {
-    id_procaptall: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // Asegúrate de tener autoIncrement si es necesario
+    id_procaptall: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    }, // Asegúrate de tener autoIncrement si es necesario
     sede_procaptall: {
       type: DataTypes.ENUM("SEDE 52", "SEDE 64", "SEDE FONTIBON"),
       allowNull: false,
