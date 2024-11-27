@@ -10,7 +10,7 @@ class Horario extends Model {
       throw error;
     }
   }
- 
+  
 
   static async getHorarios() {
     try {

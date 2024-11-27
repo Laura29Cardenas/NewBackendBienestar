@@ -58,7 +58,7 @@ class CapacitadorController {
             res.status( 500  ).json( { message: "Error al crear capacitador" + error } );
         }
     }
-
+ 
 }
 
 export default CapacitadorController;

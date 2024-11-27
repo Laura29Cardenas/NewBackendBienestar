@@ -11,7 +11,7 @@ class TallerController {
         }
     } 
 
-    static async getTallerPorNombre(req, res) {
+    static async getTallerPorNombre(req, res) { 
         try { 
             const nombreTaller = req.params.nombre;
             console.log("Buscando taller:", nombreTaller); // Log para ver el nombre que se busca

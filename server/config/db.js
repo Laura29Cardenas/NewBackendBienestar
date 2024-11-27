@@ -6,7 +6,7 @@ const sequelize = new Sequelize('Programacion12', 'root', '', {
   dialect: 'mysql',
 });
  
-// Probar la conexión
+// Probar la conexión 
 async function connectDB() {
   try {
     await sequelize.authenticate();

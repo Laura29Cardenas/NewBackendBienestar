@@ -9,7 +9,7 @@ class Administrador extends Model {
     } catch (error) {
       console.error(`error al crear administrador: ${error}`);
       throw error;
-    } 
+    }  
   }
 
   static async getAdministradores() {

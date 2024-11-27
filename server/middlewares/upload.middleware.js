@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (req, file, cb) => { 
   const ext = path.extname(file.originalname);
   if (ext !== '.xlsx' && ext !== '.xls') {
     return cb(new Error('Solo se permiten archivos Excel'));

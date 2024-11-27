@@ -13,7 +13,7 @@ class RolController{
 
   static async getRol(req, res) {
     try {
-      const id = req.params.id; 
+      const id = req.params.id;  
       const rol = await Rol.getRol(id);
       if (rol) {
         res.status(200).json(rol);

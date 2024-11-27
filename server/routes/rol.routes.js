@@ -2,7 +2,7 @@ import { Router } from "express";
 import RolController from "../controllers/rol.controller.js";
 
 
-const router = Router();
+const router = Router(); 
 
 router.get('/api/rol', RolController.getRoles);
 router.get('/api/rol/:id', RolController.getRol);

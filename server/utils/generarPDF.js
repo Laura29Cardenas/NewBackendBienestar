@@ -6,7 +6,7 @@ export const createPDF = async (informe) => {
   return new Promise((resolve, reject) => {
     try {
       // Crear un documento PDF
-      const doc = new PDFDocument();
+      const doc = new PDFDocument(); 
 
       // Configurar el nombre del archivo PDF
       doc.fontSize(16).text('Informe de Programación de Capacitación', { align: 'center' });

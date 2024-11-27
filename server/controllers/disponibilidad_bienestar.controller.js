@@ -11,7 +11,7 @@ class DisponibilidadBienestarController {
     }    
  
     static async getDispoB(req, res){
-        try {
+        try { 
             const id = req.params.id;
             const  dispoB = await DisponibilidadBienestar.getDispoB(id);
             if  ( DisponibilidadBienestar ) {

@@ -9,7 +9,7 @@ class Taller extends Model {
             console.error(`Error al crear taller: ${error}`);
             throw error;
         }
-    }
+    } 
 
     static async getTallerPorNombre(nombreTaller) {
       try {

@@ -13,138 +13,101 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 class UsuarioController {
-  // Método para enviar enlace de restauración de contraseña
-  static async sendPasswordResetEmail(req, res) {
+  // Método para enviar clave temporal
+  static async sendTemporaryPassword(req, res) {
     const { email } = req.body;
-
+  
+    if (!email) {
+      return res.status(400).json({ message: "El campo 'email' es requerido." });
+    }
+  
     try {
-      // Verificar si el correo está registrado en la base de datos
+      // Buscar usuario por correo
       const usuario = await Usuario.findOne({ where: { correo_Usua: email } });
       if (!usuario) {
         return res
           .status(404)
           .json({ message: "El correo electrónico no está registrado." });
       }
-
-      // Crear un token de restablecimiento (puedes usar JWT o cualquier otra técnica)
-      const token = "some_unique_token"; // Aquí generas un token para el enlace de restablecimiento
-
-      // Configurar el transporte para enviar el correo (usando Gmail SMTP)
+  
+      // Generar clave temporal
+      const claveTemporal = Math.random().toString(36).slice(-8);
+  
+      // Actualizar la clave temporal en la base de datos
+      const hashedPassword = await bcrypt.hash(claveTemporal, 10);
+      await Usuario.update({ clave_Usua: hashedPassword }, { where: { correo_Usua: email } });
+  
+      // Enviar la clave temporal por correo
       const transporter = nodemailer.createTransport({
-        service: "gmail", // Usa Gmail como servicio SMTP
+        service: "gmail",
         auth: {
-          user: process.env.GMAIL_USER || "lcardenasavila07@gmail.com", // Tu correo de Gmail
-          pass: process.env.GMAIL_PASS || "bsec ilav ofjv lzjb", // Tu contraseña de Gmail o contraseña de aplicación
+          user: process.env.GMAIL_USER || "tucorreo@gmail.com",
+          pass: process.env.GMAIL_PASS || "tucontraseña",
         },
-        tls: {
-          rejectUnauthorized: false, // Deshabilitar la verificación de seguridad para evitar posibles errores
-        },
+        tls: { rejectUnauthorized: false },
       });
-
-      // Opciones del correo
+  
       const mailOptions = {
-        from: '"Sistema de Restablecimiento de Clave" <no-reply@gmail.com>', // Remitente
-        to: email, // Destinatario
-        subject: "Restablecimiento de Contraseña",
-        text: `Para restablecer tu contraseña, haz clic en el siguiente enlace: 
-        http://localhost:3000/restablecer-clave/${token}`, // Asegúrate de que el puerto y la URL sean correctos
+        from: '"Soporte" <no-reply@gmail.com>',
+        to: email,
+        subject: "Clave Temporal de Acceso",
+        text: `Se le ha asignado una clave temporal para acceder al sistema: ${claveTemporal}`,
       };
-
-      // Enviar el correo
+  
       await transporter.sendMail(mailOptions);
-
-      res.status(200).json({ message: "Correo de restablecimiento enviado." });
+  
+      res.status(200).json({ message: "Clave temporal enviada exitosamente." });
     } catch (error) {
-      console.error("Error al enviar el correo:", error); // Log completo del error
-      res
-        .status(500)
-        .json({ message: "Error al enviar el correo.", error: error.message });
+      console.error("Error al enviar la clave temporal:", error);
+      res.status(500).json({ message: "Error interno del servidor." });
     }
-  }
-
-  // Método estático para iniciar sesión
+  }   
+ 
+  // Método estático para iniciar sesión (actualizado para soportar la clave temporal)
   static async login(req, res) {
     const { correo, contraseña } = req.body;
-
-    // Validar que el correo y la contraseña no estén vacíos
+  
+    // Validar que los campos no estén vacíos
     if (!correo || !contraseña) {
-      return res
-        .status(400)
-        .json({ message: "Correo y contraseña son requeridos." });
+      return res.status(400).json({ message: "Correo y contraseña son requeridos." });
     }
-
+  
     try {
-      console.log("Correo recibido:", correo);
-      console.log("Contraseña recibida:", contraseña);
-
-      // Buscar al usuario por correo
+      // Buscar el usuario en la base de datos
       const usuario = await Usuario.findOne({ where: { correo_Usua: correo } });
-
+  
       // Verificar si el usuario existe
       if (!usuario) {
         return res.status(404).json({ message: "Usuario no encontrado." });
       }
-
-      // Comparar la contraseña ingresada con la almacenada en la base de datos
-      const contrasenaValida = await bcrypt.compare(
-        contraseña,
-        usuario.clave_Usua
-      );
-
+  
+      // Comparar la contraseña ingresada con la almacenada
+      const contrasenaValida = await bcrypt.compare(contraseña, usuario.clave_Usua);
+  
       if (!contrasenaValida) {
         return res.status(401).json({ message: "Contraseña incorrecta." });
       }
-
-      // Crear un JWT para el usuario
+  
+      // Generar token de autenticación
       const token = jwt.sign(
-        { id_Usua: usuario.id_Usua },
+        { id_Usua: usuario.id_Usua, rol: usuario.id_Rol1FK }, // Incluye el rol en el token
         process.env.JWT_SECRET,
-        {
-          expiresIn: "1h", // Puedes cambiar el tiempo de expiración
-        }
+        { expiresIn: "1h" }
       );
-
-      // Retornar el token y el mensaje de éxito
+  
+      // Responder con el token y los datos del usuario
       return res.status(200).json({
         message: "Inicio de sesión exitoso.",
         token: token,
+        user: {
+          id: usuario.id_Usua,
+          nombre: usuario.nombre_Usua,
+          rol: usuario.id_Rol1FK, // Asegúrate de que este campo se devuelva correctamente
+        },
       });
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
       return res.status(500).json({ message: "Error interno del servidor." });
-    }
-  }
-
-  // Método estático para restablecer la contraseña
-  static async resetPassword(req, res) {
-    const { token } = req.params; // Obtener el token de la URL
-    const { newPassword } = req.body;
-
-    try {
-      // Verificar el token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const userId = decoded.id_Usua;
-
-      // Buscar al usuario en la base de datos
-      const usuario = await Usuario.findOne({ where: { id_Usua: userId } });
-
-      if (!usuario) {
-        return res.status(404).json({ message: "Usuario no encontrado." });
-      }
-
-      // Encriptar la nueva contraseña
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-      // Actualizar la contraseña del usuario
-      await Usuario.update(
-        { clave_Usua: hashedPassword },
-        { where: { id_Usua: userId } }
-      );
-
-      res.status(200).json({ message: "Contraseña actualizada con éxito." });
-    } catch (error) {
-      console.error("Error al restablecer la contraseña:", error);
-      res.status(500).json({ message: "Error al restablecer la contraseña." });
     }
   }
 

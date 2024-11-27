@@ -31,7 +31,7 @@ app.use(AdministradorRoutes);
 app.use(InstructorRoutes);
 app.use(CapacitadorRoutes);
 app.use(HorarioRoutes);
-app.use(FichaRouter);
+app.use(FichaRouter); 
 app.use(RolRouter);
 app.use(TallerRoutes);
 app.use(DisponibilidadBienestarRoutes);

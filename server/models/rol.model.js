@@ -17,7 +17,7 @@ class Rol extends Model {
     } catch (error) {
       console.error(`error al encontrar los roles: ${error}`);
       throw error;
-    }
+    } 
   }
 
   static async getRol(id) {

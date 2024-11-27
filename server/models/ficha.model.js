@@ -11,7 +11,7 @@ class Ficha extends Model {
     }
   } 
 
-  static async getFichas() {
+  static async getFichas() { 
     try {
       return await this.findAll();
     } catch (error) {

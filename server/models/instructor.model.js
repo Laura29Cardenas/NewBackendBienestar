@@ -12,7 +12,7 @@ class Instructor extends Model {
   } 
 
   static async getInstructores() {
-    try {
+    try { 
       return await this.findAll();
     } catch (error) {
       console.error(`error al encontrar los instructores: ${error}`);

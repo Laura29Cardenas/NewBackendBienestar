@@ -73,7 +73,7 @@ class Usuario extends Model {
       console.error(`Error al obtener el perfil del usuario: ${error}`);
       throw error;
     }
-  }
+  } 
   
 
   static async alternarEstadoUsuario(id_Usua) {
@@ -102,7 +102,8 @@ class Usuario extends Model {
 
 static async getbuscarUsuario(tipoDoc, documento, nombre) {
   try {
-    const result = await sequelize.query(`CALL ObtenerUsuario(:tipoDoc, :documento, :nombre)`, {
+    const result = await sequelize.query(`
+      CALL ObtenerUsuario(:tipoDoc, :documento, :nombre)`, {
       replacements: { 
         tipoDoc, 
         documento, 
@@ -118,8 +119,6 @@ static async getbuscarUsuario(tipoDoc, documento, nombre) {
     throw error;
   }
 }
-
-
 
 static async updateUsuario(id_Usuario, update_usuario) {
   const saltRounds = 10; // Definir el número de rondas de sal

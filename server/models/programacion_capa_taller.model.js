@@ -35,7 +35,7 @@ class ProgramacionCapaTaller extends Model {
               p.fecha_procaptall === programacion.fecha_procaptall &&
               p.horaInicio_procaptall === programacion.horaInicio_procaptall
           )
-      );
+      ); 
     } catch (error) {
       console.error("Error al ejecutar ObtenerProgramacionPorFicha:", error);
       throw error;
@@ -76,78 +76,146 @@ class ProgramacionCapaTaller extends Model {
     return new Promise((resolve, reject) => {
       const doc = new PDFDocument();
       let buffers = [];
-  
+
       doc.on("data", buffers.push.bind(buffers));
       doc.on("end", () => {
         const pdfData = Buffer.concat(buffers);
         resolve(pdfData);
       });
-  
+
       // Configuración inicial del documento
-      doc.fontSize(12).fillColor('black');
-  
+      doc.fontSize(12).fillColor("black");
+
       // Título un poco más a la izquierda
-      const title = 'Informe de Programación';
+      const title = "Informe de Programación";
       const titleX = 50; // Desplazado un poco hacia la izquierda
-      doc.fontSize(18).fillColor('black').text(title, titleX, 30);  // Título más a la izquierda
-  
+      doc.fontSize(18).fillColor("black").text(title, titleX, 30); // Título más a la izquierda
+
       // Línea verde debajo del título
-      doc.moveTo(50, 60)  // Posición de la línea
-        .lineTo(doc.page.width - 50, 60)  // Longitud de la línea
-        .strokeColor('#5cb85c')  // Color verde
-        .lineWidth(2)  // Grosor de la línea
+      doc
+        .moveTo(50, 60) // Posición de la línea
+        .lineTo(doc.page.width - 50, 60) // Longitud de la línea
+        .strokeColor("#5cb85c") // Color verde
+        .lineWidth(2) // Grosor de la línea
         .stroke();
-  
+
       // Espacio después de la línea
       doc.moveDown(1.5);
-  
 
       // Obtén la ruta del archivo actual y su directorio
-      const __filename = fileURLToPath(import.meta.url);  // Convierte la URL del módulo en una ruta de archivo
-      const __dirname = path.dirname(__filename);  // Obtén el directorio del archivo
+      const __filename = fileURLToPath(import.meta.url); // Convierte la URL del módulo en una ruta de archivo
+      const __dirname = path.dirname(__filename); // Obtén el directorio del archivo
 
       // Ruta de la imagen en el servidor
-      const imagePath = path.join('C:', 'AVA 1.0', 'serverbienestar', 'server', 'img', 'logoSena.png'); // Ruta local de la imagen
+      const imagePath = path.join(
+        "C:",
+        "AVA 1.0",
+        "serverbienestar",
+        "server",
+        "img",
+        "logoSena.png"
+      ); // Ruta local de la imagen
       const imageWidth = 70; // Ancho de la imagen
       const imageHeight = 70; // Alto de la imagen
-  
+
       // Ubicamos la imagen en la esquina superior derecha
-      doc.image(imagePath, doc.page.width - imageWidth - 30, 20, { width: imageWidth, height: imageHeight });
+      doc.image(imagePath, doc.page.width - imageWidth - 30, 20, {
+        width: imageWidth,
+        height: imageHeight,
+      });
 
       // Verifica que el informe tenga datos
       if (!informe || !informe[0]) {
-        doc.fontSize(12).text("No se encontraron datos para generar el informe.");
+        doc
+          .fontSize(12)
+          .text("No se encontraron datos para generar el informe.");
         doc.end();
         return;
       }
-  
+
       // Accede al primer objeto dentro del array de resultados
       const data = informe[0];
-  
+
       // Comienza a agregar los datos de forma estructurada, alineados a la izquierda
-      doc.fontSize(12).fillColor('black');
-  
+      doc.fontSize(12).fillColor("black");
+
       // Establecemos un margen para los datos (alineado a la izquierda)
       const marginLeft = 50;
-      const lineHeight = 1; // Espaciado entre líneas
-  
+      const lineHeight = 1.5; // Espaciado entre líneas
+
       // Agregar cada línea de datos con un margen a la izquierda
-      doc.text(`Sede: ${data.sede_procaptall || "No disponible"}`, marginLeft, doc.y);
+      doc.text(
+        `Sede: ${data.sede_procaptall || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
       doc.moveDown(lineHeight);
-      doc.text(`Descripción: ${data.descripcion_procaptall || "No disponible"}`, marginLeft, doc.y);
+      doc.text(
+        `Descripción: ${data.descripcion_procaptall || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
       doc.moveDown(lineHeight);
-      doc.text(`Ambiente: ${data.ambiente_procaptall || "No disponible"}`, marginLeft, doc.y);
+      doc.text(
+        `Ambiente: ${data.ambiente_procaptall || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
       doc.moveDown(lineHeight);
-      doc.text(`Fecha: ${data.fecha_procaptall || "No disponible"}`, marginLeft, doc.y);
+      doc.text(
+        `Fecha: ${data.fecha_procaptall || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
       doc.moveDown(lineHeight);
-      doc.text(`Hora de Inicio: ${data.horaInicio_procaptall || "No disponible"}`, marginLeft, doc.y);
+      doc.text(
+        `Hora de Inicio: ${data.horaInicio_procaptall || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
       doc.moveDown(lineHeight);
-      doc.text(`Hora de Fin: ${data.horaFin_procaptall || "No disponible"}`, marginLeft, doc.y);
+      doc.text(
+        `Hora de Fin: ${data.horaFin_procaptall || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
       doc.moveDown(lineHeight);
-      doc.text(`Número de Ficha: ${data.numero_FichaFK || "No disponible"}`, marginLeft, doc.y);
+      doc.text(
+        `Número de Ficha: ${data.numero_FichaFK || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
       doc.moveDown(lineHeight);
-      doc.text(`Coordinación: ${data.cordinacion_Ficha || "No disponible"}`, marginLeft, doc.y);
-  
+      doc.text(
+        `Coordinación: ${data.cordinacion_Ficha || "No disponible"}`,
+        marginLeft,
+        doc.y
+      );
+
+      // Espacio después del último dato antes de agregar la segunda imagen
+      doc.moveDown(2);
+
+      // Segunda imagen (logoBienestar.png, ubicada al final del PDF)
+      const secondImagePath = path.join(
+        "C:",
+        "AVA 1.0",
+        "serverbienestar",
+        "server",
+        "img",
+        "logoBienestar.png"
+      ); // Ruta local de la segunda imagen
+      const secondImageWidth = 200; // Ancho de la segunda imagen
+      const secondImageHeight = 150; // Alto de la segunda imagen
+
+      // Calcular la posición X para centrar la imagen
+      const centerX = (doc.page.width - secondImageWidth) / 2;
+
+      // Obtener la posición Y de la última línea
+      const positionY = doc.y;
+
+      // Agregar la segunda imagen centrada
+      doc.image(secondImagePath, centerX, positionY, { width: secondImageWidth, height: secondImageHeight });
+
       // Finaliza el documento
       doc.end();
     });

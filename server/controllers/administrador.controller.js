@@ -10,7 +10,7 @@ class AdministradorController{
       res.status(500).json({ message: "Error al obtener los administradores" + error });
     }
   } 
-  static async getAdministrador(req, res) {
+  static async getAdministrador(req, res) { 
     try {
       const id = req.params.id;
       const administrador = await Administrador.getAdministrador(id);

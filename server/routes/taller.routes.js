@@ -1,7 +1,7 @@
 import { Router } from "express";
 import TallerController from "../controllers/taller.controller.js";
 
-const router = Router();
+const router = Router(); 
 
 router.get('/api/taller', TallerController.getTalleres);
 router.get('/api/taller/:nombre', TallerController.getTallerPorNombre); // Cambiado a nombre

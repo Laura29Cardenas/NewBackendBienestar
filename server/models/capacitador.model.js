@@ -41,7 +41,7 @@ class Capacitador extends Model {
 
 }
  
-Capacitador.init(
+Capacitador.init( 
   {
     id_Capac: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     nombre_Capac: { type: DataTypes.STRING(40), allowNull: false },

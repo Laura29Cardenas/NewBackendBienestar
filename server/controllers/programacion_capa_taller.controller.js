@@ -38,7 +38,7 @@ class ProgramacionCapaTallerController {
   static async postObtenerInforme(req, res) {
     const { fecha, sede, coordinacion, numeroFicha, ambiente } = req.body;
 
-    try {
+    try { 
       const informe = await ProgramacionCapaTaller.getInforme(fecha, sede, coordinacion, numeroFicha, ambiente);
 
       if (!informe) {
